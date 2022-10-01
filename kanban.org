@@ -1,0 +1,57 @@
+*My little kanban in org mode + elisp*
+- [[kanban][kanban]]
+- [[tasklist][tasklist]]
+
+#+NAME: kanban
+#+BEGIN_SRC emacs-lisp :results value :var tasklist=tasklist :exports both
+  (defvar kanban-status-todo) (setq kanban-status-todo 0)
+  (defvar kanban-status-working) (setq kanban-status-working 0)
+  (defvar kanban-status-finish) (setq kanban-status-finish 0)
+  (defun kanban-status (item status func)
+    (if (string= (car (nth 1 (nth 1 item))) status)
+      (progn
+        (funcall func)
+        (car item))
+      "-"))
+  (cons '("#" Backlog Working Finish)
+    (cons 'hline
+      (append
+        (cl-loop for index from 1 for item in tasklist collect
+          (list
+            index
+            (kanban-status item "=TODO=" (lambda () (setq kanban-status-todo (+ 1 kanban-status-todo))))
+            (kanban-status item "=WORKING=" (lambda () (setq kanban-status-working (+ 1 kanban-status-working))))
+            (kanban-status item "=DONE=" (lambda () (setq kanban-status-finish (+ 1 kanban-status-finish))))))
+        (cons 'hline
+          (list
+            (list "Total" kanban-status-todo kanban-status-working kanban-status-finish))))))
+#+END_SRC
+
+<<kanban>>
+#+RESULTS: kanban
+|     # | Backlog                     | Working                     | Finish                      |
+|-------+-----------------------------+-----------------------------+-----------------------------|
+|     1 | [[https://danbooru.donmai.us/posts/5661051][Task 4]] <2022-11-30 Wed>  [[task4][->]] | -                           | -                           |
+|     2 | -                           | [[https://danbooru.donmai.us/posts/5661051][Task 3]] <2022-11-20 Sun>  [[task3][->]] | -                           |
+|     3 | -                           | -                           | [[https://danbooru.donmai.us/posts/5661051][Task 2]] <2022-11-10 Thu>  [[task2][->]] |
+|     4 | -                           | -                           | [[https://danbooru.donmai.us/posts/5661051][Task 1]] <2022-11-01 Tue>  [[task1][->]] |
+|-------+-----------------------------+-----------------------------+-----------------------------|
+| Total | 1                           | 1                           | 2                           |
+
+<<tasklist>>
+#+NAME: tasklist
+- [[https://danbooru.donmai.us/posts/5661051][Task 4]] <2022-11-30 Wed> [[task4][->]]
+  - =TODO=
+  - <<task4>> Description goes here
+    + Subtask 1
+    + Subtask 2
+    + Subtask 3
+- [[https://danbooru.donmai.us/posts/5661051][Task 3]] <2022-11-20 Wed> [[task3][->]]
+  - =WORKING=
+  - <<task3>> Description goes here
+- [[https://danbooru.donmai.us/posts/5661051][Task 2]] <2022-11-10 Wed> [[task2][->]]
+  - =DONE=
+  - <<task2>> Description goes here
+- [[https://danbooru.donmai.us/posts/5661051][Task 1]] <2022-11-01 Wed> [[task1][->]]
+  - =DONE=
+  - <<task1>> Description goes here
