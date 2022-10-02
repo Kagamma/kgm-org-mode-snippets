@@ -1,0 +1,24 @@
+#+STARTUP: inlineimages
+
+#+BEGIN_SRC artist
+
+    +-------------+                 +----------------+
+    |             |                 |                |
+    |   Satania   +---------------->|      (you)     |
+    |             |                 |                |
+    +-------------+                 +----------------+
+
+                               
+#+END_SRC
+
+#+BEGIN_SRC ditaa :file diagram.png
+    +-------------+                 +----------------+
+    |             |                 |                |
+    |   Satania   +---------------->|      (you)     |
+    |             |                 |                |
+    +-------------+                 +----------------+
+  
+#+END_SRC
+
+#+RESULTS:
+[[file:diagram.png]]
